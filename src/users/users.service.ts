@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { get } from 'http';
 
 @Injectable()
 export class UsersService {
@@ -8,8 +7,8 @@ export class UsersService {
     return 'This action returns all users';
   }
   // 유저 개별 조회
-  findOne() {
-    return 'This action returns a #${id} user';
+  findOne(id: number) {
+    return `This action returns a #${id} user`;
   }
   // 유저 생성
   create() {
