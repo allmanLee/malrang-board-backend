@@ -8,6 +8,5 @@ export class UserRequestDto {
   @IsEmail()
   email: string;
 
-  @IsNotEmpty()
   password: string;
 }
