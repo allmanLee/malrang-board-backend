@@ -15,11 +15,11 @@ export class UsersService {
     return 'This action adds a new user';
   }
   // 유저 업데이트
-  update() {
-    return 'This action updates a #${id} user';
+  update(id: number) {
+    return `This action updates a #${id} user`;
   }
   // 유저 삭제
-  delete() {
-    return 'This action removes a #${id} user';
+  delete(id: number) {
+    return `This action removes a #${id} user`;
   }
 }

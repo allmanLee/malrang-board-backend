@@ -15,4 +15,9 @@ describe('UsersService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  test('should return an array of users', () => {
+    const result = service.findAll();
+    expect(result).toHaveLength(29);
+  });
 });

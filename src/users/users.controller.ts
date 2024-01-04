@@ -22,12 +22,12 @@ export class UsersController {
   }
 
   @Put(':id')
-  update() {
-    return this.userService.update();
+  update(@Param() params) {
+    return this.userService.update(params.id);
   }
 
   @Delete(':id')
-  delete() {
-    return this.userService.delete();
+  delete(@Param() params): string {
+    return this.userService.delete(params.id);
   }
 }

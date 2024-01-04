@@ -1,17 +1,29 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
+import { LoggerMiddleware } from './logger/logger.middleware';
+import { MiddlewareConsumer } from '@nestjs/common/interfaces/middleware';
+import * as mongoose from 'mongoose';
 
 @Module({
   imports: [
+    UsersModule,
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MOGODB_URI, {}),
-    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  private readonly isDev: boolean = process.env.MODE === 'development';
+
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('/users');
+
+    // 환경변수 사용 - 프로덕션 배포할땐 false이고 개발환결일때는 true 이기때문
+    mongoose.set('debug', this.isDev);
+  }
+}
