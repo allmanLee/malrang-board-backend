@@ -45,7 +45,7 @@ export class UsersService {
     });
 
     this.logger.log('유저 생성 완료', user);
-    return user;
+    return user.readOnlyData;
   }
   // 유저 업데이트
   update(id: number) {
