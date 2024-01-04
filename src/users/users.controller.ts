@@ -1,8 +1,22 @@
-import { Controller, Get, Post, Put, Param, Delete, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Param,
+  Delete,
+  Req,
+  Body,
+  UseFilters,
+  HttpException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request } from 'express';
+import { HttpExceptionFilter } from '../http-exception.filter';
+import { UserRequestDto } from 'src/dto/users.request.dto';
 
 @Controller('users')
+@UseFilters(HttpExceptionFilter)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -17,7 +31,20 @@ export class UsersController {
   }
 
   @Post()
-  create() {
+  create(@Body() body: UserRequestDto) {
+    console.log(body);
+    // throw new HttpException(
+    //   {
+    //     success: false,
+    //     status: HttpStatus.FORBIDDEN,
+    //     error: 'This is a custom message',
+    //   },
+    //   HttpStatus.FORBIDDEN,
+    // );
+
+    // HttpException 에 에러메세지만 변경해서 에러를 던질 수 있도록 수정
+    // throw new HttpException('에러 커스텀 익셉션 테스트', 403);
+
     return this.userService.create();
   }
 

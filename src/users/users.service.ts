@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger('USER API');
+
   // 유저 전체 조회
   findAll() {
     return 'This action returns all users';
@@ -12,6 +14,8 @@ export class UsersService {
   }
   // 유저 생성
   create() {
+    this.logger.log('유저 생성 API 호출');
+
     return 'This action adds a new user';
   }
   // 유저 업데이트
