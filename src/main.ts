@@ -19,6 +19,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
   const PORT = process.env.PORT || 3000;
+
+  // CORS 설정
+  app.enableCors({
+    origin: true, // 이렇게 해줘야 모든 요청에 대해 CORS 허용합니다.
+    credentials: true, // 이걸 해줘야 쿠키가 전달됩니다.
+  });
+
   await app.listen(PORT);
 }
 bootstrap();
