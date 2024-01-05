@@ -1,18 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { User } from 'src/users/users.schema';
 
-export class ReadOnlyUserDto {
+export class ReadOnlyUserDto extends PickType(User, [
+  'email',
+  'name',
+] as const) {
   @ApiProperty({
-    example: 'name',
-    description: '이름',
+    example: 'id',
+    description: '아이디',
     required: true,
   })
-  name: string;
-
-  @ApiProperty({
-    example: 'email',
-    description: '이메일',
-    required: true,
-  })
-  email: string;
+  id: string;
 }
