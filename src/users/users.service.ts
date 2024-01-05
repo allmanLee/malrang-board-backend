@@ -4,15 +4,17 @@ import {
   Logger,
   // UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from './users.schema';
+// import { InjectModel } from '@nestjs/mongoose';
+// import { Model } from 'mongoose';
+// import { User } from './users.schema';
 import { UserRequestDto } from '../dto/users.request.dto';
 import * as bcrypt from 'bcrypt';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  // constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   private readonly logger = new Logger('USER API');
 
@@ -27,7 +29,7 @@ export class UsersService {
   // 유저 생성
   async create(body: UserRequestDto) {
     const { email, name, password } = body;
-    const isUserExit = await this.userModel.exists({ email });
+    const isUserExit = await this.usersRepository.existsByEmail(email);
 
     if (isUserExit) {
       // 403 에러를 던지는 자동화된 클래스
@@ -38,7 +40,7 @@ export class UsersService {
 
     const hahedPassword = await bcrypt.hash(password, 10);
 
-    const user = await this.userModel.create({
+    const user = await this.usersRepository.create({
       email,
       name,
       password: hahedPassword,

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { Model } from 'mongoose';
+import { UsersRepository } from './users.repository';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -13,6 +14,7 @@ describe('UsersService', () => {
           provide: 'UserModel', // Replace 'UserModel' with the actual name of your UserModel
           useValue: Model, // Replace 'Model' with the actual implementation of your UserModel
         },
+        UsersRepository,
       ],
     }).compile();
 

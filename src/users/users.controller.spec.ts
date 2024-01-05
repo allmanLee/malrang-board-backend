@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { Model } from 'mongoose';
+import { UsersRepository } from './users.repository';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -12,6 +13,7 @@ describe('UsersController', () => {
       controllers: [UsersController],
       providers: [
         UsersService,
+        UsersRepository,
         {
           provide: 'UserModel', // Replace 'UserModel' with the actual name of your UserModel
           useValue: Model, // Replace 'Model' with the actual implementation of your UserModel

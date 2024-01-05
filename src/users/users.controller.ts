@@ -15,7 +15,7 @@ import { Request } from 'express';
 import { HttpExceptionFilter } from '../http-exception.filter';
 import { UserRequestDto } from '../dto/users.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ReadOnlyUserDto } from 'src/dto/users.dto';
+import { ReadOnlyUserDto } from '../dto/users.dto';
 
 @Controller('users')
 @UseFilters(HttpExceptionFilter)
