@@ -17,6 +17,8 @@ import { UserRequestDto } from '../dto/users.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ReadOnlyUserDto } from '../dto/users.dto';
 
+import { Permission, User } from './users.schema';
+
 @Controller('users')
 @UseFilters(HttpExceptionFilter)
 export class UsersController {
@@ -73,5 +75,26 @@ export class UsersController {
   @Delete(':id')
   delete(@Param() params): string {
     return this.userService.delete(params.id);
+  }
+
+  // 사용자 퍼미션 조회 API
+  @Get(':id/permissions')
+  async findPermissions(@Param() params): Promise<Permission> {
+    return await this.userService.findPermissions(params.id);
+  }
+
+  // 사용자 퍼미션 변경 API
+  @Put(':id/permissions')
+  async updatePermissions(@Param() params): Promise<User['readOnlyData']> {
+    return await this.userService.updatePermissions(params.id, 'admin');
+  }
+
+  // 로그인 API
+  @Post('login')
+  async login(
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ): Promise<User['readOnlyData']> {
+    return await this.userService.login(email, password);
   }
 }

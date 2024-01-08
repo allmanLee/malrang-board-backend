@@ -7,6 +7,17 @@ const options: SchemaOptions = {
   timestamps: true,
 };
 
+// permission: 'admin' | 'user' | 'guest'
+
+export type Permission = 'admin' | 'user';
+
+export interface readOnlyData {
+  id: string;
+  email: string;
+  name: string;
+  permission: Permission;
+}
+
 @Schema(options)
 export class User extends Document {
   @ApiProperty({
@@ -37,19 +48,15 @@ export class User extends Document {
   @Prop({})
   password: string;
 
-  readonly readOnlyData: {
-    id: string;
-    email: string;
-    name: string;
-  };
+  @Prop({})
+  permission: Permission;
+
+  readonly readOnlyData: readOnlyData;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.virtual('readOnlyData').get(function (this: User) {
-  return {
-    id: this.id,
-    email: this.email,
-    name: this.name,
-  };
+UserSchema.virtual('readOnlyData').get(function (this: User): readOnlyData {
+  const { id, email, name, permission } = this;
+  return { id, email, name, permission };
 } as any);

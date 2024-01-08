@@ -10,6 +10,7 @@ import {
 import { UserRequestDto } from '../dto/users.request.dto';
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
+import { Permission, User } from './users.schema';
 
 @Injectable()
 export class UsersService {
@@ -56,5 +57,43 @@ export class UsersService {
   // 유저 삭제
   delete(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  // 사용자 퍼미션 조회
+  async findPermissions(userId: number): Promise<Permission> {
+    const user = await this.usersRepository.findOne(userId);
+    return user.permission;
+  }
+
+  // 사용자 퍼미션 업데이트
+  async updatePermissions(
+    userId: number,
+    permission: Permission,
+  ): Promise<User['readOnlyData']> {
+    const user = await this.usersRepository.findOne(userId);
+    user.permission = permission;
+    await user.save();
+    return user.readOnlyData;
+  }
+
+  // 로그인
+  async login(email: string, password: string): Promise<User['readOnlyData']> {
+    Logger.log('로그인 서비스 진입');
+    const user = await this.usersRepository.findByEmail(email);
+
+    if (!user) {
+      this.logger.error('이메일이 존재하지 않습니다.');
+      throw new HttpException('이메일이 존재하지 않습니다.', 409);
+    }
+
+    const isPasswordValidated = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValidated) {
+      this.logger.error('비밀번호가 일치하지 않습니다.');
+      throw new HttpException('비밀번호가 일치하지 않습니다.', 409);
+    }
+
+    this.logger.log('로그인 성공');
+    return user.readOnlyData;
   }
 }
