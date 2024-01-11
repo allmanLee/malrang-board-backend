@@ -19,24 +19,24 @@ export class ProjectsService {
 
   private readonly logger = new Logger('PROJECT API');
 
-  // 유저 전체 조회
+  // 프로젝트 전체 조회
   findAll() {
     return 'This action returns all projects';
   }
-  // 유저 개별 조회
+  // 프로젝트 개별 조회
   findOne(id: number) {
     return `This action returns a #${id} project`;
   }
-  // 유저 생성
+  // 프로젝트 생성
   async create(body: ProjectRequestDto) {
     const { email, name, password } = body;
     const isProjectExit = await this.projectsRepository.existsByEmail(email);
 
     if (isProjectExit) {
       // 403 에러를 던지는 자동화된 클래스
-      // throw new UnauthorizedException('이미 존재하는 유저입니다.');
-      this.logger.error('이미 존재하는 유저입니다.');
-      throw new HttpException('이미 존재하는 유저입니다.', 409);
+      // throw new UnauthorizedException('이미 존재하는 프로젝트입니다.');
+      this.logger.error('이미 존재하는 프로젝트입니다.');
+      throw new HttpException('이미 존재하는 프로젝트입니다.', 409);
     }
 
     const hahedPassword = await bcrypt.hash(password, 10);
@@ -47,14 +47,14 @@ export class ProjectsService {
       password: hahedPassword,
     });
 
-    this.logger.log('유저 생성 완료', project);
+    this.logger.log('프로젝트 생성 완료', project);
     return project.readOnlyData;
   }
-  // 유저 업데이트
+  // 프로젝트 업데이트
   update(id: number) {
     return `This action updates a #${id} project`;
   }
-  // 유저 삭제
+  // 프로젝트 삭제
   delete(id: number) {
     return `This action removes a #${id} project`;
   }
