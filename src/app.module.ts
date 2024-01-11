@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
+import { ProjectsModule } from './projects/projects.module'; // Import the ProjectsModule
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MiddlewareConsumer } from '@nestjs/common/interfaces/middleware';
 import * as mongoose from 'mongoose';
@@ -11,6 +12,7 @@ import * as mongoose from 'mongoose';
 @Module({
   imports: [
     UsersModule,
+    ProjectsModule, // Add the ProjectsModule here
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MOGODB_URI, {}),
   ],
