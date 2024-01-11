@@ -29,8 +29,9 @@ export class UsersService {
   }
   // 유저 생성
   async create(body: UserRequestDto) {
-    const { email, name, password } = body;
+    const { email, name, password, groupName } = body;
     const isUserExit = await this.usersRepository.existsByEmail(email);
+    const isGroupExit = await this.usersRepository.existsByGroup(groupName);
 
     if (isUserExit) {
       // 403 에러를 던지는 자동화된 클래스
@@ -39,12 +40,27 @@ export class UsersService {
       throw new HttpException('이미 존재하는 유저입니다.', 409);
     }
 
+    if (!isGroupExit) {
+      // 만약 DB에 없던 그룹명이라면 그룹에 추가하고 그룹 ID를 리턴
+      await this.usersRepository.createGroup(groupName).catch((err) => {
+        this.logger.error('그룹 생성 실패', err);
+        throw new HttpException('그룹 생성 실패', 500);
+      });
+    }
+
     const hahedPassword = await bcrypt.hash(password, 10);
+
+    // 그룹 user_ids에 추가
+    await this.usersRepository.updateGroup(groupName, email).catch((err) => {
+      this.logger.error('그룹에 유저 추가 실패', err);
+      throw new HttpException('그룹에 유저 추가 실패', 500);
+    });
 
     const user = await this.usersRepository.create({
       email,
       name,
       password: hahedPassword,
+      groupName,
     });
 
     this.logger.log('유저 생성 완료', user);
