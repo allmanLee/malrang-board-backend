@@ -16,6 +16,7 @@ export interface readOnlyData {
   email: string;
   name: string;
   groupName: string;
+  groupId: string;
   permission: Permission;
 }
 
@@ -67,6 +68,15 @@ export class User extends Document {
   @Prop({})
   groupName: string;
 
+  // 그룹 아이디
+  @ApiProperty({
+    example: 'groupId',
+    description: '그룹 아이디',
+    required: true,
+  })
+  @Prop({})
+  groupId: string;
+
   readonly readOnlyData: readOnlyData;
 }
 
@@ -94,93 +104,13 @@ export class Group extends Document {
 
   // 유저들의 id를 저장
   @Prop({})
-  user_ids: string[];
+  userIds: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 export const GroupSchema = SchemaFactory.createForClass(Group);
 
 UserSchema.virtual('readOnlyData').get(function (this: User): readOnlyData {
-  const { id, email, name, groupName, permission } = this;
-  return { id, email, name, groupName, permission };
+  const { id, email, groupId, name, groupName, permission } = this;
+  return { id, email, groupId, name, groupName, permission };
 } as any);
-export const UserSwagger = {
-  type: 'object',
-  properties: {
-    name: {
-      type: 'string',
-      example: 'name',
-      description: '이름',
-    },
-    email: {
-      type: 'string',
-      example: 'email',
-      description: '이메일',
-    },
-    password: {
-      type: 'string',
-      example: 'password',
-      description: '비밀번호',
-    },
-    permission: {
-      type: 'string',
-      example: 'permission',
-      description: '권한',
-      enum: ['admin', 'user'],
-    },
-    groupName: {
-      type: 'string',
-      example: 'groupName',
-      description: '그룹명',
-    },
-    readOnlyData: {
-      type: 'object',
-      properties: {
-        id: {
-          type: 'string',
-          description: 'ID',
-        },
-        email: {
-          type: 'string',
-          description: '이메일',
-        },
-        name: {
-          type: 'string',
-          description: '이름',
-        },
-        groupName: {
-          type: 'string',
-          description: '그룹명',
-        },
-        permission: {
-          type: 'string',
-          description: '권한',
-          enum: ['admin', 'user'],
-        },
-      },
-    },
-  },
-};
-
-export const GroupSwagger = {
-  type: 'object',
-  properties: {
-    name: {
-      type: 'string',
-      example: 'name',
-      description: '이름',
-    },
-    domain: {
-      type: 'string',
-      example: 'domain',
-      description: '도메인',
-    },
-    user_ids: {
-      type: 'array',
-      items: {
-        type: 'string',
-      },
-      description: '유저들의 ID',
-    },
-  },
-};

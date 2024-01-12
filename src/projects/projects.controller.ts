@@ -17,7 +17,8 @@ import { ProjectRequestDto } from './dto/projects.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ReadOnlyProjectDto } from './dto/projects.dto';
 
-import { Permission, Project } from './projects.schema';
+import { Project } from './projects.schema';
+import { getProjectParams } from 'src/types/params.type';
 
 @Controller('projects')
 @UseFilters(HttpExceptionFilter)
@@ -25,19 +26,22 @@ export class ProjectsController {
   constructor(private readonly projectService: ProjectsService) {}
 
   @Get()
-  @ApiOperation({ summary: '전체 사용자 조회' })
-  findAll(): string {
-    return this.projectService.findAll();
+  @ApiOperation({ summary: '전체 프로젝트 조회' })
+  async findAll(
+    @Req() request: Request,
+    @Param() params: getProjectParams,
+  ): Promise<Project[]> {
+    return await this.projectService.findAll(params);
   }
 
   @Get(':id')
-  @ApiOperation({ summary: '사용자 조회' })
+  @ApiOperation({ summary: '프로젝트 조회' })
   findOne(@Req() request: Request, @Param() params): string {
     return this.projectService.findOne(params.id);
   }
 
   @Post()
-  @ApiOperation({ summary: '사용자 생성 API' })
+  @ApiOperation({ summary: '프로젝트 생성 API' })
   @ApiResponse({
     status: 200,
     description: '성공',
@@ -65,36 +69,15 @@ export class ProjectsController {
     return await this.projectService.create(body);
   }
 
-  @ApiOperation({ summary: '사용자 업데이트 API' })
+  @ApiOperation({ summary: '프로젝트 업데이트 API' })
   @Put(':id')
   update(@Param() params) {
     return this.projectService.update(params.id);
   }
 
-  @ApiOperation({ summary: '사용자 삭제 API' })
+  @ApiOperation({ summary: '프로젝트 삭제 API' })
   @Delete(':id')
   delete(@Param() params): string {
     return this.projectService.delete(params.id);
-  }
-
-  // 사용자 퍼미션 조회 API
-  @Get(':id/permissions')
-  async findPermissions(@Param() params): Promise<Permission> {
-    return await this.projectService.findPermissions(params.id);
-  }
-
-  // 사용자 퍼미션 변경 API
-  @Put(':id/permissions')
-  async updatePermissions(@Param() params): Promise<Project['readOnlyData']> {
-    return await this.projectService.updatePermissions(params.id, 'admin');
-  }
-
-  // 로그인 API
-  @Post('login')
-  async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ): Promise<Project['readOnlyData']> {
-    return await this.projectService.login(email, password);
   }
 }

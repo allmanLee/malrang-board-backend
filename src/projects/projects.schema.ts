@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
-import { IsEmail, IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 import { Document } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from 'src/users/users.schema';
 
 const options: SchemaOptions = {
   timestamps: true,
@@ -12,10 +13,12 @@ const options: SchemaOptions = {
 export type Permission = 'admin' | 'project';
 
 export interface readOnlyData {
-  id: string;
-  email: string;
   name: string;
-  permission: Permission;
+  teams?: Team[];
+  groupId?: string;
+  projectId?: string;
+  users?: User[];
+  createuserId: string;
 }
 
 @Schema(options)
@@ -31,34 +34,60 @@ export class Project extends Document {
   name: string;
 
   @ApiProperty({
-    example: 'email',
-    description: '이메일',
+    example: 'groupId',
+    description: '그룹 아이디',
     required: true,
   })
   @Prop({ required: true })
   @IsNotEmpty()
-  @IsEmail()
-  email: string;
+  groupId: string;
 
+  teams: Team[];
+  createuserId: string;
+  isDeleted: boolean;
+
+  readonly readOnlyData: readOnlyData;
+}
+
+@Schema(options)
+export class Team extends Document {
   @ApiProperty({
-    example: 'password',
-    description: '비밀번호',
+    example: 'name',
+    description: '이름',
     required: true,
   })
-  @Prop({})
-  password: string;
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-  @Prop({})
-  permission: Permission;
+  users: User[];
+  projectId: string;
+  createuserId: string;
+  isDeleted: boolean;
 
   readonly readOnlyData: readOnlyData;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);
+export const TeamSchema = SchemaFactory.createForClass(Team);
 
 ProjectSchema.virtual('readOnlyData').get(function (
   this: Project,
 ): readOnlyData {
-  const { id, email, name, permission } = this;
-  return { id, email, name, permission };
+  return {
+    name: this.name,
+    teams: this.teams ? this.teams : null,
+    groupId: this.groupId,
+    createuserId: this.createuserId,
+  };
+} as any);
+
+TeamSchema.virtual('readOnlyData').get(function (this: Team): readOnlyData {
+  return {
+    name: this.name,
+    users: this.users ? this.users : null,
+    projectId: this.projectId,
+    createuserId: this.createuserId,
+  };
 } as any);

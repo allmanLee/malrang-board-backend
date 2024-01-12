@@ -22,7 +22,13 @@ export class UsersRepository {
   }
 
   /* ---------------------------------- 유저 생성 --------------------------------- */
-  create(user: UserRequestDto) {
+  create(user: {
+    email: string;
+    name: string;
+    password: string;
+    groupName: string;
+    groupId: string;
+  }) {
     const createdUser = new this.userModel(user);
     return createdUser.save();
   }
@@ -58,7 +64,7 @@ export class UsersRepository {
     }
   }
 
-  async findGroupIdx(name: string) {
+  async findGroup(name: string) {
     try {
       const result = await this.groupModel.findOne({ name }).exec();
       return result;
@@ -67,11 +73,21 @@ export class UsersRepository {
     }
   }
 
+  async findGroupId(name: string): Promise<string> {
+    try {
+      const result = await this.groupModel.findOne({ name }).exec();
+      console.log('어,...', result._id);
+      return result._id;
+    } catch (error) {
+      throw new HttpException('서버 에러', 500);
+    }
+  }
+
   async updateGroup(name: string, email: string) {
     console.log('그룹에 유저 추가');
     try {
-      const group = await this.findGroupIdx(name);
-      group.user_ids.push(email);
+      const group = await this.findGroup(name);
+      group.userIds.push(email);
       await group.save();
     } catch (error) {
       throw new HttpException('서버 에러', 500);

@@ -3,7 +3,6 @@ import { Project } from '../projects.schema';
 // import { IsNotEmpty, IsEmail } from 'class-validator';
 
 export class ProjectRequestDto extends PickType(Project, [
-  'email',
   'name',
-  'password',
+  'createuserId',
 ] as const) {}
