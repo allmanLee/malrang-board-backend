@@ -1,9 +1,9 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { Project } from '../projects.schema';
+import { Project, Team } from '../projects.schema';
 
 export class ReadOnlyProjectDto extends PickType(Project, [
   'name',
-  'createuserId',
+  'createUserId',
 ] as const) {
   @ApiProperty({
     example: 'id',
@@ -41,9 +41,10 @@ export class ReadOnlyProjectDto extends PickType(Project, [
   isDeleted: boolean;
 }
 
-export class ReadOnlyTeamDto extends PickType(Project, [
+export class ReadOnlyTeamDto extends PickType(Team, [
   'name',
-  'createuserId',
+  'projectId',
+  'createUserId',
 ] as const) {
   @ApiProperty({
     example: 'id',

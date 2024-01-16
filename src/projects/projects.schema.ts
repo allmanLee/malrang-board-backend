@@ -8,17 +8,20 @@ const options: SchemaOptions = {
   timestamps: true,
 };
 
-// permission: 'admin' | 'project' | 'guest'
-
-export type Permission = 'admin' | 'project';
-
-export interface readOnlyData {
+export interface readOnlyProject {
   name: string;
   teams?: Team[];
   groupId?: string;
   projectId?: string;
   users?: User[];
-  createuserId: string;
+  createUserId: string;
+}
+
+export interface readOnlyTeam {
+  name: string;
+  users?: User[];
+  projectId?: string;
+  createUserId: string;
 }
 
 @Schema(options)
@@ -42,12 +45,11 @@ export class Project extends Document {
   @IsNotEmpty()
   @IsString()
   groupId: string;
-
   teams: Team[];
-  createuserId: string;
+  createUserId: string;
   isDeleted: boolean;
 
-  readonly readOnlyData: readOnlyData;
+  readonly readOnlyProject: readOnlyProject;
 }
 
 @Schema(options)
@@ -62,33 +64,57 @@ export class Team extends Document {
   @IsString()
   name: string;
 
+  @ApiProperty({
+    example: 'users',
+    description: '팀 유저',
+    required: true,
+  })
+  @Prop({})
   users: User[];
+
+  @ApiProperty({
+    example: 'projectId',
+    description: '팀이 속한 프로젝트',
+    required: true,
+  })
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
   projectId: string;
-  createuserId: string;
+
+  @ApiProperty({
+    example: 'createUserId',
+    description: '팀 생성 유저',
+    required: true,
+  })
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  createUserId: string;
   isDeleted: boolean;
 
-  readonly readOnlyData: readOnlyData;
+  readonly readOnlyTeam: readOnlyTeam;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);
 export const TeamSchema = SchemaFactory.createForClass(Team);
 
-ProjectSchema.virtual('readOnlyData').get(function (
+ProjectSchema.virtual('readOnlyProject').get(function (
   this: Project,
-): readOnlyData {
+): readOnlyProject {
   return {
     name: this.name,
     teams: this.teams ? this.teams : null,
     groupId: this.groupId,
-    createuserId: this.createuserId,
+    createUserId: this.createUserId,
   };
 } as any);
 
-TeamSchema.virtual('readOnlyData').get(function (this: Team): readOnlyData {
+TeamSchema.virtual('readOnlyTeam').get(function (this: Team): readOnlyTeam {
   return {
     name: this.name,
     users: this.users ? this.users : null,
     projectId: this.projectId,
-    createuserId: this.createuserId,
+    createUserId: this.createUserId,
   };
 } as any);

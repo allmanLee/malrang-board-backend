@@ -13,7 +13,7 @@ import {
 import { ProjectsService } from './projects.service';
 import { Request } from 'express';
 import { HttpExceptionFilter } from '../http-exception.filter';
-import { ProjectRequestDto } from './dto/projects.request.dto';
+import { ProjectRequestDto, TeamRequestDto } from './dto/projects.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ReadOnlyProjectDto } from './dto/projects.dto';
 
@@ -79,5 +79,12 @@ export class ProjectsController {
   @Delete(':id')
   delete(@Param() params): string {
     return this.projectService.delete(params.id);
+  }
+
+  /* ------------------------------- 팀 CRUD API ------------------------------- */
+  @ApiOperation({ summary: '팀 생성 API' })
+  @Post('/teams')
+  async createTeam(@Body() body: TeamRequestDto) {
+    return await this.projectService.createTeam(body);
   }
 }

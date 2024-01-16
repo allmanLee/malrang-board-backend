@@ -1,4 +1,4 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException, Logger } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -17,20 +17,26 @@ export class UsersRepository {
       const result = await this.userModel.exists({ email });
       return !!result; // Explicitly return a boolean value
     } catch (error) {
+      Logger.error('유저 존재 여부 체크 에러', error);
       throw new HttpException('서버 에러', 500);
     }
   }
 
   /* ---------------------------------- 유저 생성 --------------------------------- */
-  create(user: {
+  async create(user: {
     email: string;
     name: string;
     password: string;
     groupName: string;
     groupId: string;
   }) {
-    const createdUser = new this.userModel(user);
-    return createdUser.save();
+    try {
+      const createdUser = new this.userModel(user);
+      return await createdUser.save();
+    } catch (error) {
+      Logger.error('유저 생성 에러', error);
+      throw new HttpException('서버 에러', 500);
+    }
   }
 
   async findAll() {
@@ -69,6 +75,7 @@ export class UsersRepository {
       const result = await this.groupModel.findOne({ name }).exec();
       return result;
     } catch (error) {
+      console.log('그룹 조회 에러', error);
       throw new HttpException('서버 에러', 500);
     }
   }
@@ -76,9 +83,9 @@ export class UsersRepository {
   async findGroupId(name: string): Promise<string> {
     try {
       const result = await this.groupModel.findOne({ name }).exec();
-      console.log('어,...', result._id);
-      return result._id;
+      return result?._id;
     } catch (error) {
+      console.log('그룹 조회 에러2', error);
       throw new HttpException('서버 에러', 500);
     }
   }

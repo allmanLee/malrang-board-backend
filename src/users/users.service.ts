@@ -33,6 +33,9 @@ export class UsersService {
     const isUserExit = await this.usersRepository.existsByEmail(email);
     let groupId = await this.usersRepository.findGroupId(groupName);
 
+    // 여긴가?
+    Logger.log('유저 생성 서비스 진입');
+
     if (isUserExit) {
       // 403 에러를 던지는 자동화된 클래스
       // throw new UnauthorizedException('이미 존재하는 유저입니다.');
@@ -40,8 +43,11 @@ export class UsersService {
       throw new HttpException('이미 존재하는 유저입니다.', 409);
     }
 
+    console.log('여긴가');
+
     if (!groupId) {
       // 만약 DB에 없던 그룹명이라면 그룹에 추가하고 그룹 ID를 리턴
+      console.log('여긴가');
       groupId = await this.usersRepository
         .createGroup(groupName)
         .then((res) => {
