@@ -19,23 +19,13 @@ export class ProjectsService {
   private readonly logger = new Logger('PROJECT API');
 
   // 프로젝트 전체 조회
-  findAll(params: getProjectParams) {
-    const { groupId, projectId, isDeleted } = params;
-
-    // 기본적으로  isDeleted가 false인 프로젝트만 조회
-    const query = {
-      groupId,
-      projectId,
-      isDeleted: false,
-    };
-
-    // isDeleted가 true일 경우 삭제된 프로젝트도 조회
-    if (isDeleted) {
-      delete query.isDeleted;
+  async findAll(params: getProjectParams) {
+    try {
+      const projects = await this.projectsRepository.findAll(params);
+      return projects;
+    } catch (error) {
+      throw new HttpException(error, 500);
     }
-
-    // 프로젝트 조회
-    return this.projectsRepository.findAll(query);
   }
   // 프로젝트 개별 조회
   findOne(id: number) {
@@ -44,9 +34,10 @@ export class ProjectsService {
   // 프로젝트 생성
   async create(body: ProjectRequestDto) {
     try {
-      const { name, createuserId } = body;
+      const { name, createuserId, groupId } = body;
       const project = await this.projectsRepository.create({
         name,
+        groupId,
         createuserId,
       });
       console.log(project);

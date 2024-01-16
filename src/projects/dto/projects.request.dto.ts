@@ -4,5 +4,6 @@ import { Project } from '../projects.schema';
 
 export class ProjectRequestDto extends PickType(Project, [
   'name',
+  'groupId',
   'createuserId',
 ] as const) {}

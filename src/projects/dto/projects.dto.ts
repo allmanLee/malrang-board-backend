@@ -28,7 +28,7 @@ export class ReadOnlyProjectDto extends PickType(Project, [
 
   @ApiProperty({
     example: 'groupId',
-    description: '프로젝트 생성 유저',
+    description: '프로젝트가 속한 그룹',
     required: true,
   })
   groupId: string;

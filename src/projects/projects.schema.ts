@@ -40,6 +40,7 @@ export class Project extends Document {
   })
   @Prop({ required: true })
   @IsNotEmpty()
+  @IsString()
   groupId: string;
 
   teams: Team[];
