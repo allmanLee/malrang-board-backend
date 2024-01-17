@@ -34,11 +34,40 @@ export class ProjectsRepository {
     return await this.projectModel.find(query).exec();
   }
 
-  async findOne(id: number) {
-    return await this.projectModel.findById(id).exec();
+  /**  프로젝트에 팀 추가
+   * @param projectId 프로젝트 아이디
+   * @param team 팀 (RequestDto가 아닌 Team 스키마)
+   * @returns
+   **/
+  async addTeam(projectId: string, team: Team) {
+    try {
+      const project = await this.projectModel.findById(projectId).exec();
+
+      if (!project)
+        throw new HttpException('프로젝트가 존재하지 않습니다.', 404);
+
+      if (!project?.teams) project.teams = [];
+      if (project.teams?.includes(team))
+        throw new HttpException('이미 존재하는 팀입니다.', 409);
+
+      project.teams.push(team);
+      return await project.save();
+    } catch (error) {
+      throw new HttpException(error, 500);
+    }
   }
 
-  async delete(id: number) {
+  // 프로젝트 개별 조회
+  async findOne(id: string) {
+    try {
+      return await this.projectModel.findById(id).exec();
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, 500);
+    }
+  }
+
+  async delete(id: string) {
     return await this.projectModel.findByIdAndDelete(id).exec();
   }
 

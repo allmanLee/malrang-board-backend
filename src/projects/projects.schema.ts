@@ -45,6 +45,8 @@ export class Project extends Document {
   @IsNotEmpty()
   @IsString()
   groupId: string;
+
+  @Prop({})
   teams: Team[];
   createUserId: string;
   isDeleted: boolean;

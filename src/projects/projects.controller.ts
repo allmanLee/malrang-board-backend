@@ -36,7 +36,7 @@ export class ProjectsController {
 
   @Get(':id')
   @ApiOperation({ summary: '프로젝트 조회' })
-  findOne(@Req() request: Request, @Param() params): string {
+  findOne(@Req() request: Request, @Param() params): Promise<Project> {
     return this.projectService.findOne(params.id);
   }
 
@@ -77,8 +77,8 @@ export class ProjectsController {
 
   @ApiOperation({ summary: '프로젝트 삭제 API' })
   @Delete(':id')
-  delete(@Param() params): string {
-    return this.projectService.delete(params.id);
+  async delete(@Param() params) {
+    return await this.projectService.delete(params.id);
   }
 
   /* ------------------------------- 팀 CRUD API ------------------------------- */

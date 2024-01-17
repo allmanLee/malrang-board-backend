@@ -28,8 +28,15 @@ export class ProjectsService {
     }
   }
   // 프로젝트 개별 조회
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
+  async findOne(id: string) {
+    try {
+      const project = await this.projectsRepository.findOne(id);
+      return project;
+    } catch (error) {
+      throw new HttpException(error, 500);
+    } finally {
+      this.logger.log('프로젝트 조회');
+    }
   }
   // 프로젝트 생성
   async create(body: ProjectRequestDto) {
@@ -40,9 +47,10 @@ export class ProjectsService {
         groupId,
         createUserId,
       });
-      console.log(project);
+
       return project;
     } catch (error) {
+      console.log('프로젝트 생성 서비스단 오류');
       throw new HttpException(error, 500);
     }
   }
@@ -52,16 +60,19 @@ export class ProjectsService {
     return `This action updates a #${id} project`;
   }
   // 프로젝트 삭제
-  delete(id: number) {
-    return `This action removes a #${id} project`;
+  async delete(id: string) {
+    try {
+      const project = await this.projectsRepository.delete(id);
+      return project;
+    } catch (error) {
+      throw new HttpException(error, 500);
+    }
   }
 
   /* --------------------------------- 팀 CRUD --------------------------------- */
 
   // 팀 생성
   async createTeam(body: TeamRequestDto) {
-    // 로그
-    this.logger.log('팀 생성', body);
     try {
       const { name, createUserId, projectId } = body;
       const Team = await this.projectsRepository.createTeam({
@@ -69,10 +80,12 @@ export class ProjectsService {
         projectId,
         createUserId,
       });
-      console.log(Team);
+
+      this.projectsRepository.addTeam(projectId, Team);
+      console.log('음......');
       return Team;
     } catch (error) {
-      console.log('너구나 Service, error', error);
+      console.log('팀 생성 서비스단 오류', error);
       throw new HttpException(error, 500);
     }
   }

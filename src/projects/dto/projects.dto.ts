@@ -17,7 +17,7 @@ export class ReadOnlyProjectDto extends PickType(Project, [
     description: '프로젝트 팀',
     required: true,
   })
-  teams: string[];
+  teams: Team[];
 
   @ApiProperty({
     example: 'users',
