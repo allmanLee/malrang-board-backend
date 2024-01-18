@@ -7,6 +7,11 @@ import { UsersModule } from './users/users.module';
 import { ProjectsModule } from './projects/projects.module'; // Import the ProjectsModule
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MiddlewareConsumer } from '@nestjs/common/interfaces/middleware';
+
+// 웹 소켓
+import { SocketModule } from './socket/socket.module';
+import { SocketGateway } from './socket/socket.gateway';
+import { KanbanModule } from './kanban/kanban.module';
 import * as mongoose from 'mongoose';
 
 @Module({
@@ -15,9 +20,14 @@ import * as mongoose from 'mongoose';
     ProjectsModule, // Add the ProjectsModule here
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MOGODB_URI, {}),
+
+    // 웹 소켓
+    SocketModule,
+
+    KanbanModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SocketGateway],
 })
 export class AppModule implements NestModule {
   private readonly isDev: boolean = process.env.MODE === 'development';
