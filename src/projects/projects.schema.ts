@@ -19,7 +19,7 @@ export interface readOnlyProject {
 
 export interface readOnlyTeam {
   name: string;
-  users?: User[];
+  members?: any[]; // TODO :member 속성 정의 필요 - 맴버는 유저와 달리 추가적으로 프로필 이미지를 가지고 있습니다.
   projectId?: string;
   createUserId: string;
 }
@@ -67,12 +67,12 @@ export class Team extends Document {
   name: string;
 
   @ApiProperty({
-    example: 'users',
+    example: 'members (Users)',
     description: '팀 유저',
     required: true,
   })
   @Prop({})
-  users: User[];
+  members: any[];
 
   @ApiProperty({
     example: 'projectId',
@@ -115,7 +115,7 @@ ProjectSchema.virtual('readOnlyProject').get(function (
 TeamSchema.virtual('readOnlyTeam').get(function (this: Team): readOnlyTeam {
   return {
     name: this.name,
-    users: this.users ? this.users : null,
+    members: this.members ? this.members : null,
     projectId: this.projectId,
     createUserId: this.createUserId,
   };

@@ -39,8 +39,13 @@ export class UsersRepository {
     }
   }
 
-  async findAll() {
-    return await this.userModel.find().exec();
+  async findAll(params) {
+    try {
+      return await this.userModel.find(params).exec();
+    } catch (error) {
+      Logger.error('유저 전체 조회 에러', error);
+      throw new HttpException('서버 에러', 500);
+    }
   }
 
   async findOne(id: number) {

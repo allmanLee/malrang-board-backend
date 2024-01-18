@@ -19,6 +19,7 @@ import { ReadOnlyProjectDto } from './dto/projects.dto';
 
 import { Project } from './projects.schema';
 import { getProjectParams } from 'src/types/params.type';
+import { readOnlyData } from 'src/users/users.schema';
 
 @Controller('projects')
 @UseFilters(HttpExceptionFilter)
@@ -86,5 +87,33 @@ export class ProjectsController {
   @Post('/teams')
   async createTeam(@Body() body: TeamRequestDto) {
     return await this.projectService.createTeam(body);
+  }
+
+  // @ApiOperation({ summary: '팀 조회 API' })
+  // @Get('/teams/:id')
+  // async findTeam(@Param() params) {
+  //   return await this.projectService.findTeam(params.id);
+  // }
+
+  @ApiOperation({ summary: '팀에 맴버추가 API' })
+  @Post('/:projectId/teams/:teamId/members/:userId')
+  async addMember(@Param() params, @Body() body): Promise<readOnlyData> {
+    const { projectId, teamId, userId } = params;
+    console.log('TODO body', body);
+    return await this.projectService.addMember(projectId, teamId, userId);
+  }
+
+  @ApiOperation({ summary: '프로젝트에서 팀 삭제 API' })
+  @Delete('/:projectId/teams/:teamId')
+  async deleteTeam(@Param() params): Promise<Project> {
+    const { projectId, teamId } = params;
+    return await this.projectService.deleteTeam(projectId, teamId);
+  }
+
+  @ApiOperation({ summary: '팀에서 유저를 삭제 API' })
+  @Delete('/:projectId/teams/:teamId/members/:userId')
+  async deleteMember(@Param() params) {
+    const { projectId, teamId, userId } = params;
+    return await this.projectService.deleteMember(projectId, teamId, userId);
   }
 }

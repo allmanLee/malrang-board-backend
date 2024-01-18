@@ -20,3 +20,9 @@ export type getMemberPrams = {
   member_id?: number;
   isDeleted?: boolean;
 };
+
+export type getUsersParams = {
+  groupId?: number;
+  boardId?: number;
+  isDeleted?: boolean;
+};

@@ -10,7 +10,8 @@ import {
 import { UserRequestDto } from '../dto/users.request.dto';
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
-import { Permission, User } from './users.schema';
+import { Permission, User, readOnlyData } from './users.schema';
+import { getUsersParams } from 'src/types/params.type';
 
 @Injectable()
 export class UsersService {
@@ -20,8 +21,16 @@ export class UsersService {
   private readonly logger = new Logger('USER API');
 
   // 유저 전체 조회
-  findAll() {
-    return 'This action returns all users';
+  async findAll(params: getUsersParams): Promise<readOnlyData[]> {
+    try {
+      // 아이디 변경
+      const result = await this.usersRepository.findAll(params);
+
+      return result.map((user) => user.readOnlyData);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, 500);
+    }
   }
   // 유저 개별 조회
   findOne(id: number) {
@@ -125,7 +134,7 @@ export class UsersService {
       throw new HttpException('비밀번호가 일치하지 않습니다.', 409);
     }
 
-    this.logger.log('로그인 성공');
+    this.logger.log('로그인 성공', user.readOnlyData);
     return user.readOnlyData;
   }
 }

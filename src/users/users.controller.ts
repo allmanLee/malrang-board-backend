@@ -17,7 +17,9 @@ import { UserRequestDto } from '../dto/users.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ReadOnlyUserDto } from '../dto/users.dto';
 
-import { Permission, User } from './users.schema';
+import { Permission, User, readOnlyData } from './users.schema';
+
+import { getUsersParams } from 'src/types/params.type';
 
 @Controller('users')
 @UseFilters(HttpExceptionFilter)
@@ -26,8 +28,8 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ summary: '전체 사용자 조회' })
-  findAll(): string {
-    return this.userService.findAll();
+  async findAll(@Param() params: getUsersParams): Promise<readOnlyData[]> {
+    return await this.userService.findAll(params);
   }
 
   @Get(':id')
@@ -95,6 +97,7 @@ export class UsersController {
     @Body('email') email: string,
     @Body('password') password: string,
   ): Promise<User['readOnlyData']> {
+    console.log('로그인 컨트롤러 진입');
     return await this.userService.login(email, password);
   }
 }
