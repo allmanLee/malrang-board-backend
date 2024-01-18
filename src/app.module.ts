@@ -9,9 +9,10 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 import { MiddlewareConsumer } from '@nestjs/common/interfaces/middleware';
 
 // 웹 소켓
-import { SocketModule } from './socket/socket.module';
+// import { SocketModule } from './socket/socket.module';
 import { SocketGateway } from './socket/socket.gateway';
 import { KanbanModule } from './kanban/kanban.module';
+import { SocketModule } from './socket/socket.module';
 import * as mongoose from 'mongoose';
 
 @Module({
@@ -21,10 +22,10 @@ import * as mongoose from 'mongoose';
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MOGODB_URI, {}),
 
-    // 웹 소켓
-    SocketModule,
-
+    // SocketModule,
     KanbanModule,
+
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService, SocketGateway],

@@ -170,12 +170,12 @@ export class Card extends Document {
 export const BoardSchema = SchemaFactory.createForClass(Board);
 export const CardSchema = SchemaFactory.createForClass(Card);
 
-BoardSchema.virtual('readOnlyBoard').get(function (this: Board): readOnlyBoard {
+BoardSchema.virtual('readOnlyData').get(function (this: Board): readOnlyBoard {
   const { id, status, title, kanbanId, teamId, permission, order } = this;
   return { id, status, title, kanbanId, teamId, permission, order };
 });
 
-CardSchema.virtual('readOnlyCard').get(function (this: Card): readOnlyCard {
+CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
   const {
     id,
     title,
