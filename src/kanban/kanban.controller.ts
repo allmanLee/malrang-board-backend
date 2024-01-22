@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -10,6 +11,8 @@ import {
 } from '@nestjs/common';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { KanbanService } from './kanban.service';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ReadOnlyBoardDto } from './dto/kanban.dto';
 
 @Controller('kanban/boards')
 @UseFilters(HttpExceptionFilter)
@@ -35,10 +38,21 @@ export class KanbanController {
 
   // 보드 추가 API
   // POST /kanban/boards
-  // @Post()
-  // async create(): Promise<any> {
-  //   return await this.kanbanService.create();
-  // }
+  @ApiOperation({ summary: '사용자 생성 API' })
+  @ApiResponse({
+    status: 200,
+    description: '성공',
+    // type: UserRequestDto,
+  })
+  @ApiResponse({
+    status: 500,
+    description: '서버 에러',
+    // type: ReadOnlyUserDto,
+  })
+  @Post()
+  async create(@Body() body: ReadOnlyBoardDto): Promise<any> {
+    return await this.kanbanService.create(body);
+  }
 
   // 보드 삭제 API
   // DELETE /kanban/boards/:id

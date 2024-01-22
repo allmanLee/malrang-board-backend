@@ -30,10 +30,9 @@ export class KanbanService {
 
   // 보드 추가 API
   // POST /kanban/boards
-  // @Post()
-  // async create(): Promise<any> {
-  //   return await this.kanbanService.create();
-  // }
+  async create(payload): Promise<any> {
+    return await this.kanbanRepository.create(payload);
+  }
 
   // 보드 삭제 API
   // DELETE /kanban/boards/:id

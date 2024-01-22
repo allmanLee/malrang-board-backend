@@ -49,7 +49,7 @@ export class Board extends Document {
   @ApiProperty({
     example: 'status',
     description: '상태',
-    required: true,
+    // required: true,
   })
   @Prop({})
   status: BoardStatus;
@@ -58,9 +58,9 @@ export class Board extends Document {
     example: 'kanbanId',
     description:
       '칸반 ID - TODO 앞으로 여러개의 팀에 여러개의 칸반을 만들 수 있으므로',
-    required: true,
+    // required: true,
   })
-  @Prop({ required: true })
+  // @Prop({ required: true })
   @IsNotEmpty()
   @IsString()
   kanbanId: string;
@@ -79,7 +79,7 @@ export class Board extends Document {
     example: 'permission',
     description:
       '권한 - 여러개의 칸반이 만들어지면 권한에 따라서 볼 수 있는 칸반이 다르다.',
-    required: true,
+    // required: true,
     enum: ['admin', 'user'],
   })
   @Prop({})
@@ -89,7 +89,7 @@ export class Board extends Document {
   @ApiProperty({
     example: 'order',
     description: '정렬 순서',
-    required: true,
+    // required: true,
   })
   @Prop({})
   order: number;

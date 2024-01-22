@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Board, readOnlyBoard } from './kanban.schema';
+import { ReadOnlyBoardDto } from './dto/kanban.dto';
 
 @Injectable()
 export class KanbanRepository {
@@ -24,8 +25,10 @@ export class KanbanRepository {
     return board;
   }
 
-  async create() {
+  async create(payload: ReadOnlyBoardDto) {
     const createdBoard = new this.boardModal();
+    createdBoard.title = payload.title;
+    createdBoard.teamId = payload.teamId;
     return createdBoard.save();
   }
 
