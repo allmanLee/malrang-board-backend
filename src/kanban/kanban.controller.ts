@@ -7,15 +7,19 @@ import {
   Patch,
   Post,
   Put,
+  Query,
+  Req,
   UseFilters,
 } from '@nestjs/common';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { KanbanService } from './kanban.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ReadOnlyBoardDto } from './dto/kanban.dto';
+import { getBoardsParams } from 'src/types/params.type';
 
 @Controller('kanban/boards')
 @UseFilters(HttpExceptionFilter)
+@ApiTags('kanban')
 // API 기능을 구현하는 컨트롤러
 // 기능: 보드 조회, 보드 추가 및 삭제, 카드 조회, 카드 추가 및 삭제, 카드 이동, 카드 수정, 카드 상태 변경 API
 export class KanbanController {
@@ -25,8 +29,22 @@ export class KanbanController {
   // GET /kanban/boards
   // GET /kanban/boards/:id
   @Get()
-  async findAll(@Param() params): Promise<any> {
-    return await this.kanbanService.findAll(params);
+  @ApiOperation({ summary: '전체 보드 조회' })
+  @ApiResponse({
+    status: 200,
+    description: '성공',
+    type: ReadOnlyBoardDto,
+  })
+  @ApiResponse({
+    status: 500,
+    description: '서버 에러',
+    type: ReadOnlyBoardDto,
+  })
+  async findAll(
+    @Req() request: any,
+    @Query() query: getBoardsParams,
+  ): Promise<any> {
+    return await this.kanbanService.findAll(query);
   }
 
   // 보드 개별 조회 API

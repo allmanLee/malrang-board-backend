@@ -14,7 +14,7 @@ import { UsersService } from './users.service';
 import { Request } from 'express';
 import { HttpExceptionFilter } from '../http-exception.filter';
 import { UserRequestDto } from '../dto/users.request.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ReadOnlyUserDto } from '../dto/users.dto';
 
 import { Permission, User, readOnlyData } from './users.schema';
@@ -22,6 +22,7 @@ import { Permission, User, readOnlyData } from './users.schema';
 import { getUsersParams } from 'src/types/params.type';
 
 @Controller('users')
+@ApiTags('users')
 @UseFilters(HttpExceptionFilter)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}

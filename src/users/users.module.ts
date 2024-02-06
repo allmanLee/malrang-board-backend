@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { GroupSchema, User, Group, UserSchema } from './users.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersRepository } from './users.repository';
+import { ApiTags } from '@nestjs/swagger';
 
 @Module({
   imports: [
@@ -14,4 +15,5 @@ import { UsersRepository } from './users.repository';
   providers: [UsersService, UsersRepository],
   exports: [UsersService],
 })
+@ApiTags('users')
 export class UsersModule {}

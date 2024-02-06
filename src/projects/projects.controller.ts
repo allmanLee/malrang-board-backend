@@ -14,7 +14,7 @@ import { ProjectsService } from './projects.service';
 import { Request } from 'express';
 import { HttpExceptionFilter } from '../http-exception.filter';
 import { ProjectRequestDto, TeamRequestDto } from './dto/projects.request.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ReadOnlyProjectDto } from './dto/projects.dto';
 
 import { Project } from './projects.schema';
@@ -22,6 +22,7 @@ import { getProjectParams } from 'src/types/params.type';
 import { readOnlyData } from 'src/users/users.schema';
 
 @Controller('projects')
+@ApiTags('projects')
 @UseFilters(HttpExceptionFilter)
 export class ProjectsController {
   constructor(private readonly projectService: ProjectsService) {}

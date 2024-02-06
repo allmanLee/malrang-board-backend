@@ -14,8 +14,8 @@ export class KanbanRepository {
   // readOnlyData (readOnlyBaord, readOnlyCard)
 
   async findAll(params: any): Promise<readOnlyBoard[]> {
-    const boards = await this.boardModal.find(params).exec();
-
+    // 파라미터로 받은 teamId로 보드 리스트를 조회
+    const boards = await this.boardModal.find({ teamId: params.teamId }).exec();
     // readOnlyBoard[]; 로 바꿈
     return boards.map((board) => board.readOnlyData);
   }

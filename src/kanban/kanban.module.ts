@@ -12,6 +12,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   ],
   controllers: [KanbanController],
   providers: [KanbanService, KanbanRepository],
-  exports: [KanbanService],
+  exports: [KanbanService, KanbanRepository],
 })
 export class KanbanModule {}

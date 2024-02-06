@@ -11,6 +11,7 @@ export class ReadOnlyBoardDto extends PickType(Board, [
     required: true,
   })
   title: string;
+
   @ApiProperty({
     example: 'teamId',
     description: '프로젝트 팀',

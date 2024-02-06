@@ -26,3 +26,9 @@ export type getUsersParams = {
   boardId?: number;
   isDeleted?: boolean;
 };
+
+export type getBoardsParams = {
+  teamId?: number;
+  boardId?: number;
+  isDeleted?: boolean;
+};

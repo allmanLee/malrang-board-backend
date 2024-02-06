@@ -11,11 +11,15 @@ import { ProjectRequestDto, TeamRequestDto } from './dto/projects.request.dto';
 import { ProjectsRepository } from './projects.repository';
 import { getProjectParams } from 'src/types/params.type';
 import { Project } from './projects.schema';
+import { KanbanRepository } from 'src/kanban/kanban.repository';
 
 @Injectable()
 export class ProjectsService {
   // constructor(@InjectModel(Project.name) private projectModel: Model<Project>) {}
-  constructor(private readonly projectsRepository: ProjectsRepository) {}
+  constructor(
+    private readonly projectsRepository: ProjectsRepository,
+    private readonly kanbanRepositiory: KanbanRepository,
+  ) {}
 
   private readonly logger = new Logger('PROJECT API');
 
@@ -83,6 +87,16 @@ export class ProjectsService {
       });
 
       this.projectsRepository.addTeam(projectId, Team);
+
+      // 팀이 생성 될 때 기본적으로 보드가 5개 생성됩니다.
+      // 한일, 진행중, 테스트, 완료, 보류
+      for (let i = 0; i < 5; i++) {
+        await this.kanbanRepositiory.create({
+          title: ['한일', '진행중', '테스트', '완료', '보류'][i],
+          teamId: Team._id,
+        });
+      }
+
       return Team;
     } catch (error) {
       console.log('팀 생성 서비스단 오류', error);
