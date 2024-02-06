@@ -12,6 +12,6 @@ export interface Commit {
   id: number;
   title: string;
   created_date: string;
-  userIdx: number;
+  userId: string;
   card_idx: number;
 }

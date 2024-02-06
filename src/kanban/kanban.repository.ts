@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Board, readOnlyBoard } from './kanban.schema';
+import { Board, Card, readOnlyBoard } from './kanban.schema';
 import { ReadOnlyBoardDto } from './dto/kanban.dto';
 
 @Injectable()
 export class KanbanRepository {
   constructor(
     @InjectModel(Board.name) private readonly boardModal: Model<Board>,
-    // @InjectModel(Card.name) private readonly cardModel: Model<Card>,
+    @InjectModel(Card.name) private readonly cardModel: Model<Card>,
   ) {}
 
   // readOnlyData (readOnlyBaord, readOnlyCard)
@@ -31,8 +31,14 @@ export class KanbanRepository {
     createdBoard.teamId = payload.teamId;
     return createdBoard.save();
   }
-
-  async delete() {
-    return 'This action removes a #${id} board';
+  // 카드를 추가합니다.
+  async addCard(boardId: string, payload: any) {
+    try {
+      // const board = await this.boardModal.findById(boardId).exec();
+      const newCard = new this.cardModel(payload);
+      return newCard.save();
+    } catch (error) {
+      throw new Error('카드 추가에 실패했습니다.');
+    }
   }
 }

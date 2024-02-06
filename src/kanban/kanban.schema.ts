@@ -8,8 +8,6 @@ const options: SchemaOptions = {
   timestamps: true,
 };
 
-// permission: 'admin' | 'user' | 'guest'
-
 export type Permission = 'admin' | 'user';
 
 export interface readOnlyBoard {
@@ -27,9 +25,9 @@ export interface readOnlyCard {
   title: string;
   description: string;
   created_date: string;
-  userIdx: number;
+  userId: string;
   userName: string;
-  boardIdx: number;
+  boardId: string;
   tags: Tag[];
   commit: Commit[];
 }
@@ -126,12 +124,12 @@ export class Card extends Document {
   created_date: string;
 
   @ApiProperty({
-    example: 'userIdx',
+    example: 'userId',
     description: '유저 인덱스',
     required: true,
   })
   @Prop({})
-  userIdx: number;
+  userId: string;
 
   @ApiProperty({
     example: 'userName',
@@ -142,12 +140,12 @@ export class Card extends Document {
   userName: string;
 
   @ApiProperty({
-    example: 'boardIdx',
+    example: 'boardId',
     description: '보드 인덱스',
     required: true,
   })
   @Prop({})
-  boardIdx: number;
+  boardId: string;
 
   @ApiProperty({
     example: 'tags',
@@ -181,9 +179,9 @@ CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
     title,
     description,
     created_date,
-    userIdx,
+    userId,
     userName,
-    boardIdx,
+    boardId,
     tags,
     commit,
   } = this;
@@ -192,9 +190,9 @@ CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
     title,
     description,
     created_date,
-    userIdx,
+    userId,
     userName,
-    boardIdx,
+    boardId,
     tags,
     commit,
   };
