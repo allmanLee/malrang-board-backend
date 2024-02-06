@@ -24,7 +24,6 @@ import * as mongoose from 'mongoose';
 
     // SocketModule,
     KanbanModule,
-
     SocketModule,
   ],
   controllers: [AppController],
