@@ -15,9 +15,9 @@ import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { KanbanService } from './kanban.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ReadOnlyBoardDto } from './dto/kanban.dto';
-import { getBoardsParams } from 'src/types/params.type';
+import { getBoardsParams, getCardsParams } from 'src/types/params.type';
 
-@Controller('kanban/boards')
+@Controller('kanban')
 @UseFilters(HttpExceptionFilter)
 @ApiTags('kanban')
 // API 기능을 구현하는 컨트롤러
@@ -28,7 +28,7 @@ export class KanbanController {
   // 보드 조회 API
   // GET /kanban/boards
   // GET /kanban/boards/:id
-  @Get()
+  @Get('/boards')
   @ApiOperation({ summary: '전체 보드 조회' })
   @ApiResponse({
     status: 200,
@@ -56,7 +56,7 @@ export class KanbanController {
 
   // 보드 추가 API
   // POST /kanban/boards
-  @ApiOperation({ summary: '사용자 생성 API' })
+  @ApiOperation({ summary: '보드 생성 API' })
   @ApiResponse({
     status: 200,
     description: '성공',
@@ -67,19 +67,42 @@ export class KanbanController {
     description: '서버 에러',
     // type: ReadOnlyUserDto,
   })
-  @Post()
+  @Post('/boards')
   async create(@Body() body: ReadOnlyBoardDto): Promise<any> {
     return await this.kanbanService.create(body);
   }
 
+  // 카드 조회 API
+  // GET /kanban/boards/cards
+  @Get('/cards')
+  @ApiOperation({ summary: '전체 카드 조회' })
+  @ApiResponse({
+    status: 200,
+    description: '성공',
+    // type: UserRequestDto,
+  })
+  async findAllCards(@Query() query: getCardsParams): Promise<any> {
+    return await this.kanbanService.findAllCards(query);
+  }
+
   // 카드 추가 API
   // POST /kanban/boards/:id/cards
-  @Post(':id/card')
+  @Post('/boards/:id/card')
   async addCard(
     @Param('id') id: string,
     @Body() body: ReadOnlyBoardDto,
   ): Promise<any> {
     const baordId = id;
     return await this.kanbanService.addCard(baordId, body);
+  }
+
+  // 카드 이동 API
+  // PATCH /kanban/boards/:id/cards
+  @Patch('/boards/:boardId/card/:cardId')
+  async moveCard(
+    @Param('boardId') boardId: string,
+    @Param('cardId') cardId: string,
+  ): Promise<any> {
+    return await this.kanbanService.moveCard(boardId, cardId);
   }
 }

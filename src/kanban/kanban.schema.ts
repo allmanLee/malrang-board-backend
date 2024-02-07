@@ -25,6 +25,7 @@ export interface readOnlyCard {
   title: string;
   description: string;
   created_date: string;
+  teamId: string;
   userId: string;
   userName: string;
   boardId: string;
@@ -140,6 +141,14 @@ export class Card extends Document {
   userName: string;
 
   @ApiProperty({
+    example: 'teamId',
+    description: '팀 인덱스',
+    required: true,
+  })
+  @Prop({ required: true })
+  teamId: string;
+
+  @ApiProperty({
     example: 'boardId',
     description: '보드 인덱스',
     required: true,
@@ -181,6 +190,7 @@ CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
     created_date,
     userId,
     userName,
+    teamId,
     boardId,
     tags,
     commit,
@@ -191,6 +201,7 @@ CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
     description,
     created_date,
     userId,
+    teamId,
     userName,
     boardId,
     tags,

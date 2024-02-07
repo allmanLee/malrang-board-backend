@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Board, Card, readOnlyBoard } from './kanban.schema';
 import { ReadOnlyBoardDto } from './dto/kanban.dto';
+import type { getCardsParams } from 'src/types/params.type';
 
 @Injectable()
 export class KanbanRepository {
@@ -31,6 +32,12 @@ export class KanbanRepository {
     createdBoard.teamId = payload.teamId;
     return createdBoard.save();
   }
+
+  async findAllCards(query: getCardsParams) {
+    const cards = await this.cardModel.find(query).exec();
+    return cards;
+  }
+
   // 카드를 추가합니다.
   async addCard(boardId: string, payload: any) {
     try {
@@ -39,6 +46,17 @@ export class KanbanRepository {
       return newCard.save();
     } catch (error) {
       throw new Error('카드 추가에 실패했습니다.');
+    }
+  }
+
+  // 카드의 보드를 이동합니다.
+  async moveCard(boardId: string, cardId: string) {
+    try {
+      const card = await this.cardModel.findById(cardId).exec();
+      card.boardId = boardId;
+      return card.save();
+    } catch (error) {
+      throw new Error('카드 이동에 실패했습니다.');
     }
   }
 }

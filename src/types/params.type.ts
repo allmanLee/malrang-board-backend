@@ -32,3 +32,10 @@ export type getBoardsParams = {
   boardId?: number;
   isDeleted?: boolean;
 };
+
+export type getCardsParams = {
+  teamId?: number;
+  boardId?: number;
+  cardId?: number;
+  isDeleted?: boolean;
+};

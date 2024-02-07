@@ -23,7 +23,6 @@ import { Server } from 'http';
 // import { YourModel } from '../your-model/your-model.schema';
 
 @WebSocketGateway(4001, {
-  namespace: 'board',
   cors: { origin: '*' },
 })
 export class SocketGateway
@@ -47,25 +46,29 @@ export class SocketGateway
   }
 
   /* -------------------------------subscribe ----------------------------------- */
-  @SubscribeMessage('addCard')
+  @SubscribeMessage('cards:created')
   async handleAddCard(
-    @MessageBody() data: { title: string },
+    @MessageBody() data: { card: Card },
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     // const newCard = new this.cardModel(data);
     // await newCard.save();
-    client.broadcast.emit('updateBoard', { action: 'addCard', data });
+    const { card } = data;
+    console.log('카드 생성');
+    client.broadcast.emit('cards:created', { action: 'cards:created', card });
   }
 
-  @SubscribeMessage('moveCard')
+  @SubscribeMessage('cards:moved')
   async handleMoveCard(
-    @MessageBody() data: { card: any; currentIndex: number },
+    @MessageBody() data: { card: Card },
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     // await this.cardModel.updateOne(
     //   { _id: data.card._id },
     //   { $set: { currentIndex: data.currentIndex } },
     // );
-    client.broadcast.emit('updateBoard', { action: 'moveCard', data });
+    const { card } = data;
+    console.log('카드 이동');
+    client.broadcast.emit('cards:moved', { action: 'cards:moved', card });
   }
 }

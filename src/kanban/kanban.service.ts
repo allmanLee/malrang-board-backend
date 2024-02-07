@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { KanbanRepository } from './kanban.repository';
 import { readOnlyBoard } from './kanban.schema';
+import { getCardsParams } from 'src/types/params.type';
 
 @Injectable()
 export class KanbanService {
@@ -34,9 +35,21 @@ export class KanbanService {
     return await this.kanbanRepository.create(payload);
   }
 
+  // 카드 조회 API
+  // GET /kanban/cards
+  async findAllCards(query: getCardsParams): Promise<any> {
+    return await this.kanbanRepository.findAllCards(query);
+  }
+
   // 카드 추가 API
   // POST /kanban/boards/:id/cards
   async addCard(boardId: string, payload): Promise<any> {
     return await this.kanbanRepository.addCard(boardId, payload);
+  }
+
+  // 카드 이동 API
+  // PATCH /kanban/boards/:id/cards/:cardId
+  async moveCard(boardId: string, cardId: string): Promise<any> {
+    return await this.kanbanRepository.moveCard(boardId, cardId);
   }
 }
