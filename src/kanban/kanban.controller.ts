@@ -95,12 +95,12 @@ export class KanbanController {
   // 카드 추가 API
   // POST /kanban/boards/:id/cards
   @Post('/boards/:id/card')
-  async addCard(
+  async createCard(
     @Param('id') id: string,
     @Body() body: ReadOnlyBoardDto,
   ): Promise<any> {
     const baordId = id;
-    return await this.kanbanService.addCard(baordId, body);
+    return await this.kanbanService.createCard(baordId, body);
   }
 
   // 카드 이동 API

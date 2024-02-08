@@ -4,10 +4,12 @@ import { Model } from 'mongoose';
 import { Board, Card, readOnlyBoard } from './kanban.schema';
 import { ReadOnlyBoardDto } from './dto/kanban.dto';
 import type { getCardsParams } from 'src/types/params.type';
+import { User } from 'src/users/users.schema';
 
 @Injectable()
 export class KanbanRepository {
   constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(Board.name) private readonly boardModal: Model<Board>,
     @InjectModel(Card.name) private readonly cardModel: Model<Card>,
   ) {}
@@ -48,10 +50,17 @@ export class KanbanRepository {
   }
 
   // 카드를 추가합니다.
-  async addCard(boardId: string, payload: any) {
+  async createCard(boardId: string, payload: any) {
     try {
       // const board = await this.boardModal.findById(boardId).exec();
       const newCard = new this.cardModel(payload);
+
+      // 사용자 이름을 찾아서 카드에 추가합니다.
+      console.log(payload);
+      const findUserName = await this.userModel.findById(payload.userId).exec();
+      console.log(findUserName);
+      newCard.userName = findUserName.name;
+      console.log(newCard.userName);
       return newCard.save();
     } catch (error) {
       throw new Error('카드 추가에 실패했습니다.');

@@ -49,8 +49,8 @@ export class KanbanService {
 
   // 카드 추가 API
   // POST /kanban/boards/:id/cards
-  async addCard(boardId: string, payload): Promise<any> {
-    return await this.kanbanRepository.addCard(boardId, payload);
+  async createCard(boardId: string, payload): Promise<any> {
+    return await this.kanbanRepository.createCard(boardId, payload);
   }
 
   // 카드 이동 API
