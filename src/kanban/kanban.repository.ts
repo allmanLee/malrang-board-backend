@@ -38,6 +38,15 @@ export class KanbanRepository {
     return cards;
   }
 
+  // 카드를 삭제합니다.
+  async deleteCard(id: string) {
+    try {
+      return await this.cardModel.findByIdAndDelete(id).exec();
+    } catch (error) {
+      throw new Error('카드 삭제에 실패했습니다.');
+    }
+  }
+
   // 카드를 추가합니다.
   async addCard(boardId: string, payload: any) {
     try {

@@ -71,4 +71,15 @@ export class SocketGateway
     console.log('카드 이동');
     client.broadcast.emit('cards:moved', { action: 'cards:moved', card });
   }
+
+  @SubscribeMessage('cards:deleted')
+  async handleDeleteCard(
+    @MessageBody() data: { cardId: string },
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    // await this.cardModel.deleteOne({ _id: data.card._id });
+    const { cardId } = data;
+    console.log('카드 삭제');
+    client.broadcast.emit('cards:deleted', { action: 'cards:deleted', cardId });
+  }
 }

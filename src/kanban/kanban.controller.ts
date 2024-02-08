@@ -73,7 +73,7 @@ export class KanbanController {
   }
 
   // 카드 조회 API
-  // GET /kanban/boards/cards
+  // GET /kanban/cards
   @Get('/cards')
   @ApiOperation({ summary: '전체 카드 조회' })
   @ApiResponse({
@@ -83,6 +83,13 @@ export class KanbanController {
   })
   async findAllCards(@Query() query: getCardsParams): Promise<any> {
     return await this.kanbanService.findAllCards(query);
+  }
+
+  // 카드 삭제 API
+  // DELETE /kanban/cards/:id
+  @Delete('/cards/:id')
+  async deleteCard(@Param('id') id: string): Promise<any> {
+    return await this.kanbanService.deleteCard(id);
   }
 
   // 카드 추가 API

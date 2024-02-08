@@ -41,6 +41,12 @@ export class KanbanService {
     return await this.kanbanRepository.findAllCards(query);
   }
 
+  // 카드 삭제 API
+  // DELETE /kanban/cards/:id
+  async deleteCard(id: string): Promise<any> {
+    return await this.kanbanRepository.deleteCard(id);
+  }
+
   // 카드 추가 API
   // POST /kanban/boards/:id/cards
   async addCard(boardId: string, payload): Promise<any> {
