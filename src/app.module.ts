@@ -10,7 +10,6 @@ import { MiddlewareConsumer } from '@nestjs/common/interfaces/middleware';
 
 // 웹 소켓
 // import { SocketModule } from './socket/socket.module';
-import { SocketGateway } from './socket/socket.gateway';
 import { KanbanModule } from './kanban/kanban.module';
 import { SocketModule } from './socket/socket.module';
 import * as mongoose from 'mongoose';
@@ -27,7 +26,7 @@ import * as mongoose from 'mongoose';
     SocketModule,
   ],
   controllers: [AppController],
-  providers: [AppService, SocketGateway],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   private readonly isDev: boolean = process.env.MODE === 'development';

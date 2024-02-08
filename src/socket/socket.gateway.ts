@@ -16,8 +16,8 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+// import { InjectModel } from '@nestjs/mongoose';
+// import { Model } from 'mongoose';
 import { Card } from 'src/kanban/kanban.schema';
 import { Server } from 'http';
 // import { YourModel } from '../your-model/your-model.schema';
