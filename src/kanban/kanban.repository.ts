@@ -89,8 +89,10 @@ export class KanbanRepository {
       // 해당 보드의 카드들을 조회합니다.
       const cards = await this.cardModel.find({ boardId }).exec();
 
-      if (order) {
-        // order를 변경합니다.
+      if (cards.length === 0) {
+        card.order = 1;
+      } else {
+        // 카드의 순서를 변경합니다.
         card.order = order;
       }
 
