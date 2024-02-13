@@ -55,7 +55,7 @@ export class KanbanService {
 
   // 카드 이동 API
   // PATCH /kanban/boards/:id/cards/:cardId
-  async moveCard(boardId: string, cardId: string): Promise<any> {
-    return await this.kanbanRepository.moveCard(boardId, cardId);
+  async moveCard(boardId: string, cardId: string, order: number): Promise<any> {
+    return await this.kanbanRepository.moveCard(boardId, cardId, order);
   }
 }

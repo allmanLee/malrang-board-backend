@@ -25,6 +25,9 @@ export interface readOnlyCard {
   title: string;
   description: string;
   created_date: string;
+  order: number;
+  projectCardId: number;
+  projectId: string;
   teamId: string;
   userId: string;
   userName: string;
@@ -125,6 +128,14 @@ export class Card extends Document {
   created_date: string;
 
   @ApiProperty({
+    example: 'order',
+    description: '정렬 순서',
+    required: true,
+  })
+  @Prop({})
+  order: number;
+
+  @ApiProperty({
     example: 'userId',
     description: '유저 인덱스',
     required: true,
@@ -141,6 +152,14 @@ export class Card extends Document {
   userName: string;
 
   @ApiProperty({
+    example: 'projectCardId',
+    description: '프로젝트 기준 카드 인덱스',
+    required: true,
+  })
+  @Prop({})
+  projectCardId: number;
+
+  @ApiProperty({
     example: 'teamId',
     description: '팀 인덱스',
     required: true,
@@ -155,6 +174,16 @@ export class Card extends Document {
   })
   @Prop({})
   boardId: string;
+
+  @ApiProperty({
+    example: 'projectId',
+    description: '프로젝트 ID',
+    required: true,
+  })
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  projectId: string;
 
   @ApiProperty({
     example: 'tags',
@@ -188,10 +217,13 @@ CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
     title,
     description,
     created_date,
+    projectCardId,
     userId,
     userName,
     teamId,
     boardId,
+    order,
+    projectId,
     tags,
     commit,
   } = this;
@@ -204,7 +236,10 @@ CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
     teamId,
     userName,
     boardId,
+    projectCardId,
+    projectId,
     tags,
+    order,
     commit,
   };
 });

@@ -56,10 +56,21 @@ export class KanbanRepository {
       const newCard = new this.cardModel(payload);
 
       // 사용자 이름을 찾아서 카드에 추가합니다.
-      console.log(payload);
       const findUserName = await this.userModel.findById(payload.userId).exec();
-      console.log(findUserName);
       newCard.userName = findUserName.name;
+
+      // 동일 프로젝트ID의 카드에서 ProjectCardId중 가장 높은 숫자를 찾아서 +1을 해줍니다.
+      const cards = await this.cardModel
+        .find({ projectId: payload.projectId })
+        .exec();
+      const maxProjectCardId = cards.reduce((acc, cur) => {
+        if (acc < cur.projectCardId) {
+          return cur.projectCardId;
+        }
+        return acc;
+      }, 0);
+
+      newCard.projectCardId = maxProjectCardId + 1;
       console.log(newCard.userName);
       return newCard.save();
     } catch (error) {
@@ -68,10 +79,22 @@ export class KanbanRepository {
   }
 
   // 카드의 보드를 이동합니다.
-  async moveCard(boardId: string, cardId: string) {
+  async moveCard(boardId: string, cardId: string, order: number) {
     try {
       const card = await this.cardModel.findById(cardId).exec();
       card.boardId = boardId;
+
+      console.log('-------------order', order);
+
+      // 해당 보드의 카드들을 조회합니다.
+      const cards = await this.cardModel.find({ boardId }).exec();
+
+      if (order) {
+        // order를 변경합니다.
+        card.order = order;
+      }
+
+      // order
       return card.save();
     } catch (error) {
       throw new Error('카드 이동에 실패했습니다.');

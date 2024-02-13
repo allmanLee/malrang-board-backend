@@ -109,7 +109,8 @@ export class KanbanController {
   async moveCard(
     @Param('boardId') boardId: string,
     @Param('cardId') cardId: string,
+    @Body() body: { order: number },
   ): Promise<any> {
-    return await this.kanbanService.moveCard(boardId, cardId);
+    return await this.kanbanService.moveCard(boardId, cardId, body.order);
   }
 }
