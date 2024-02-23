@@ -3,6 +3,7 @@ import { IsString, IsNotEmpty } from 'class-validator';
 import { Document } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from 'src/users/users.schema';
+import { FormTemplate } from 'src/types/projects.type';
 
 const options: SchemaOptions = {
   timestamps: true,
@@ -21,6 +22,7 @@ export interface readOnlyTeam {
   name: string;
   members?: any[]; // TODO :member 속성 정의 필요 - 맴버는 유저와 달리 추가적으로 프로필 이미지를 가지고 있습니다.
   projectId?: string;
+  formTemplate?: FormTemplate;
   createUserId: string;
 }
 
@@ -75,6 +77,15 @@ export class Team extends Document {
   members: any[];
 
   @ApiProperty({
+    example: 'formTemplate',
+    description: '폼 템플릿',
+  })
+  @Prop({
+    type: Object,
+  })
+  formTemplate: FormTemplate;
+
+  @ApiProperty({
     example: 'projectId',
     description: '팀이 속한 프로젝트',
     required: true,
@@ -118,5 +129,6 @@ TeamSchema.virtual('readOnlyTeam').get(function (this: Team): readOnlyTeam {
     members: this.members ? this.members : null,
     projectId: this.projectId,
     createUserId: this.createUserId,
+    formTemplate: this.formTemplate,
   };
 } as any);

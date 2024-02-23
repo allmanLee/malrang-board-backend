@@ -34,6 +34,8 @@ export interface readOnlyCard {
   boardId: string;
   tags: Tag[];
   commit: Commit[];
+
+  [key: string]: any; // Index signature allowing any additional properties
 }
 
 @Schema(options)
@@ -200,6 +202,10 @@ export class Card extends Document {
   })
   @Prop({})
   commit: Commit[];
+
+  @Prop({ type: Object })
+  optionalData: any;
+
   readonly readOnlyData: readOnlyCard;
 }
 

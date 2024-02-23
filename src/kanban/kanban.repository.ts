@@ -52,7 +52,7 @@ export class KanbanRepository {
   // 카드를 추가합니다.
   async createCard(boardId: string, payload: any) {
     try {
-      // const board = await this.boardModal.findById(boardId).exec();
+      // formTemplate에 스키마를 제외한 키들이 존재하는지 확인합니다.
       const newCard = new this.cardModel(payload);
 
       // 사용자 이름을 찾아서 카드에 추가합니다.
@@ -69,9 +69,7 @@ export class KanbanRepository {
         }
         return acc;
       }, 0);
-
       newCard.projectCardId = maxProjectCardId + 1;
-      console.log(newCard.userName);
       return newCard.save();
     } catch (error) {
       throw new Error('카드 추가에 실패했습니다.');

@@ -3,10 +3,10 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   Param,
   Patch,
   Post,
-  Put,
   Query,
   Req,
   UseFilters,
@@ -95,12 +95,15 @@ export class KanbanController {
   // 카드 추가 API
   // POST /kanban/boards/:id/cards
   @Post('/boards/:id/card')
-  async createCard(
-    @Param('id') id: string,
-    @Body() body: ReadOnlyBoardDto,
-  ): Promise<any> {
-    const baordId = id;
-    return await this.kanbanService.createCard(baordId, body);
+  async createCard(@Param('id') id: string, @Body() body: any): Promise<any> {
+    try {
+      const baordId = id;
+      console.log(body);
+      return await this.kanbanService.createCard(baordId, body);
+    } catch (error) {
+      console.log('카드 추가에 실패했습니다.');
+      throw new HttpException(error, 500);
+    }
   }
 
   // 카드 이동 API
@@ -113,4 +116,11 @@ export class KanbanController {
   ): Promise<any> {
     return await this.kanbanService.moveCard(boardId, cardId, body.order);
   }
+
+  // 정보 컬럼 조회 API
+  // GET /kanban/infoColumns
+  // @Get('/infoColumns')
+  // async getInfoColumns(@Query() query: any): Promise<any> {
+  //   return await this.kanbanService.getInfoColumns(query);
+  // }
 }

@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { KanbanRepository } from './kanban.repository';
+import { ProjectsRepository } from 'src/projects/projects.repository';
 import { readOnlyBoard } from './kanban.schema';
 import { getCardsParams } from 'src/types/params.type';
 
 @Injectable()
 export class KanbanService {
-  constructor(private readonly kanbanRepository: KanbanRepository) {}
+  constructor(
+    private readonly kanbanRepository: KanbanRepository,
+    private readonly projectsRepository: ProjectsRepository,
+  ) {}
 
   /** controller */
   /**
@@ -50,7 +54,16 @@ export class KanbanService {
   // 카드 추가 API
   // POST /kanban/boards/:id/cards
   async createCard(boardId: string, payload): Promise<any> {
-    return await this.kanbanRepository.createCard(boardId, payload);
+    try {
+      const cardForm = {
+        ...payload,
+      };
+
+      return await this.kanbanRepository.createCard(boardId, cardForm);
+    } catch (error) {
+      console.log('카드 추가 서비스단 오류', error);
+      throw error;
+    }
   }
 
   // 카드 이동 API

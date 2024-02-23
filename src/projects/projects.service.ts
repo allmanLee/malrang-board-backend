@@ -12,6 +12,7 @@ import { ProjectsRepository } from './projects.repository';
 import { getProjectParams } from 'src/types/params.type';
 import { Project } from './projects.schema';
 import { KanbanRepository } from 'src/kanban/kanban.repository';
+import { FormTemplate } from 'src/types/projects.type';
 
 @Injectable()
 export class ProjectsService {
@@ -80,10 +81,28 @@ export class ProjectsService {
   async createTeam(body: TeamRequestDto) {
     try {
       const { name, createUserId, projectId } = body;
+      const formTemplate: FormTemplate = {
+        cols: [
+          {
+            key: 'endDate',
+            label: '마감일',
+            type: 'date',
+            required: true,
+          },
+          {
+            key: 'pm',
+            label: '담당자',
+            type: 'select',
+            required: true,
+          },
+        ],
+      };
+
       const Team = await this.projectsRepository.createTeam({
         name,
         projectId,
         createUserId,
+        formTemplate,
       });
 
       this.projectsRepository.addTeam(projectId, Team);

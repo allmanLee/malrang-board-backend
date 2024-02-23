@@ -82,8 +82,14 @@ export class ProjectsRepository {
   }
 
   /* ------------------------------------ 팀 ----------------------------------- */
+  // 팀아이디는 ObjectId로 변환하여 조회합니다.
+  async findTeamById(teamId: string) {
+    return await this.teamModel.findById(teamId).exec();
+  }
+
   async createTeam(team: TeamRequestDto) {
     try {
+      console.log('팀 생성', team);
       const createdTeam = new this.teamModel(team);
       return createdTeam.save();
     } catch (error) {

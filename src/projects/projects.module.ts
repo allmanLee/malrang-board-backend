@@ -3,11 +3,11 @@ import { ProjectsController } from './projects.controller';
 import { ProjectsService } from './projects.service';
 import { Project, ProjectSchema, Team, TeamSchema } from './projects.schema';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ProjectsRepository } from './projects.repository';
 import { User, UserSchema } from 'src/users/users.schema';
 import { KanbanRepository } from 'src/kanban/kanban.repository';
 import { Board, BoardSchema } from 'src/kanban/kanban.schema';
 import { Card, CardSchema } from 'src/kanban/kanban.schema';
+import { ProjectsRepository } from './projects.repository';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
@@ -18,6 +18,6 @@ import { Card, CardSchema } from 'src/kanban/kanban.schema';
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService, ProjectsRepository, KanbanRepository],
-  exports: [ProjectsService],
+  exports: [ProjectsService, ProjectsRepository],
 })
 export class ProjectsModule {}

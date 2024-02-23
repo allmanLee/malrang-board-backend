@@ -12,4 +12,5 @@ export class TeamRequestDto extends PickType(Team, [
   'name',
   'projectId',
   'createUserId',
+  'formTemplate',
 ] as const) {}
