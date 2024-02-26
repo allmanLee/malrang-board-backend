@@ -96,4 +96,19 @@ export class SocketGateway
     console.log('카드 수정');
     client.broadcast.emit('cards:updated', { action: 'cards:updated', card });
   }
+
+  // 접속 또는 접속 종료시 누가 접속했는지 누가 나갔는지 알려줍니다.
+  @SubscribeMessage('users:connected')
+  async handleConnectedUser(
+    @MessageBody() data: { userId: string; userName: string },
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    const { userId, userName } = data;
+    console.log('유저 접속');
+    client.broadcast.emit('users:connected', {
+      action: 'users:connected',
+      userId,
+      userName,
+    });
+  }
 }
