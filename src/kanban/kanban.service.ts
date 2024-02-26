@@ -66,6 +66,12 @@ export class KanbanService {
     }
   }
 
+  // 카드 변경 API
+  // PATCH /kanban/cards/:id
+  async updateCard(id: string, payload): Promise<any> {
+    return await this.kanbanRepository.updateCard(id, payload);
+  }
+
   // 카드 이동 API
   // PATCH /kanban/boards/:id/cards/:cardId
   async moveCard(boardId: string, cardId: string, order: number): Promise<any> {

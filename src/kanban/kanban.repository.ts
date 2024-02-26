@@ -94,10 +94,18 @@ export class KanbanRepository {
         card.order = order;
       }
 
-      // order
       return card.save();
     } catch (error) {
       throw new Error('카드 이동에 실패했습니다.');
+    }
+  }
+
+  // 카드를 수정합니다.
+  async updateCard(id: string, payload: any) {
+    try {
+      return await this.cardModel.findByIdAndUpdate(id, payload).exec();
+    } catch (error) {
+      throw new Error('카드 수정에 실패했습니다.');
     }
   }
 }

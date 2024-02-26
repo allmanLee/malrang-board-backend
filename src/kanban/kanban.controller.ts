@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   Req,
   UseFilters,
@@ -104,6 +105,13 @@ export class KanbanController {
       console.log('카드 추가에 실패했습니다.');
       throw new HttpException(error, 500);
     }
+  }
+
+  // 카드 수정 API
+  // POST /kanban/boards/:id/cards
+  @Put('/cards/:id')
+  async updateCard(@Param('id') id: string, @Body() body: any): Promise<any> {
+    return await this.kanbanService.updateCard(id, body);
   }
 
   // 카드 이동 API

@@ -82,4 +82,18 @@ export class SocketGateway
     console.log('카드 삭제');
     client.broadcast.emit('cards:deleted', { action: 'cards:deleted', cardId });
   }
+
+  @SubscribeMessage('cards:updated')
+  async handleUpdateCard(
+    @MessageBody() data: { card: Card },
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    // await this.cardModel.updateOne(
+    //   { _id: data.card._id },
+    //   { $set: { title: data.card.title, description: data.card.description } },
+    // );
+    const { card } = data;
+    console.log('카드 수정');
+    client.broadcast.emit('cards:updated', { action: 'cards:updated', card });
+  }
 }
