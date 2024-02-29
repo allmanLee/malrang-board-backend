@@ -108,10 +108,10 @@ export class ProjectsService {
       this.projectsRepository.addTeam(projectId, Team);
 
       // 팀이 생성 될 때 기본적으로 보드가 5개 생성됩니다.
-      // 한일, 진행중, 테스트, 완료, 보류
+      // 할일, 진행중, 테스트, 완료, 보류
       for (let i = 0; i < 5; i++) {
         await this.kanbanRepositiory.create({
-          title: ['한일', '진행중', '테스트', '완료', '보류'][i],
+          title: ['할일', '진행중', '테스트', '완료', '보류'][i],
           teamId: Team._id,
         });
       }

@@ -3,7 +3,7 @@ export type BoardStatus = 'todo' | 'doing' | 'pending' | 'done';
 // 태그 배열 타입
 export interface Tag {
   id: number;
-  title: string;
+  label: string;
   color: string;
 }
 
