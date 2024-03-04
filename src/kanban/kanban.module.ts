@@ -1,7 +1,14 @@
 import { Module } from '@nestjs/common';
 import { KanbanController } from './kanban.controller';
 import { KanbanService } from './kanban.service';
-import { Board, BoardSchema, Card, CardSchema } from 'src/kanban/kanban.schema';
+import {
+  Board,
+  BoardSchema,
+  Card,
+  CardSchema,
+  FilterView,
+  FilterViewSchema,
+} from 'src/kanban/kanban.schema';
 import { KanbanRepository } from './kanban.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from 'src/users/users.schema';
@@ -18,6 +25,9 @@ import {
   imports: [
     MongooseModule.forFeature([{ name: Board.name, schema: BoardSchema }]),
     MongooseModule.forFeature([{ name: Card.name, schema: CardSchema }]),
+    MongooseModule.forFeature([
+      { name: FilterView.name, schema: FilterViewSchema },
+    ]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MongooseModule.forFeature([{ name: Team.name, schema: TeamSchema }]),
     MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),

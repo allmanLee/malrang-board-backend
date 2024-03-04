@@ -77,4 +77,16 @@ export class KanbanService {
   async moveCard(boardId: string, cardId: string, order: number): Promise<any> {
     return await this.kanbanRepository.moveCard(boardId, cardId, order);
   }
+
+  // 필터뷰 조회 API
+  // GET /kanban/filterViews
+  async getFilterViews(query: any): Promise<any> {
+    return await this.kanbanRepository.getFilterViews(query);
+  }
+
+  // 필터뷰 생성 API
+  // POST /kanban/filterViews
+  async createFilterView(payload): Promise<any> {
+    return await this.kanbanRepository.createFilterView(payload);
+  }
 }

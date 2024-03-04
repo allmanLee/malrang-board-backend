@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Board, Card, readOnlyBoard } from './kanban.schema';
+import { Board, Card, FilterView, readOnlyBoard } from './kanban.schema';
 import { ReadOnlyBoardDto } from './dto/kanban.dto';
 import type { getCardsParams } from 'src/types/params.type';
 import { User } from 'src/users/users.schema';
@@ -10,26 +10,28 @@ import { User } from 'src/users/users.schema';
 export class KanbanRepository {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-    @InjectModel(Board.name) private readonly boardModal: Model<Board>,
+    @InjectModel(Board.name) private readonly boardModel: Model<Board>,
     @InjectModel(Card.name) private readonly cardModel: Model<Card>,
+    @InjectModel(FilterView.name)
+    private readonly filterViewModel: Model<FilterView>,
   ) {}
 
   // readOnlyData (readOnlyBaord, readOnlyCard)
 
   async findAll(params: any): Promise<readOnlyBoard[]> {
     // 파라미터로 받은 teamId로 보드 리스트를 조회
-    const boards = await this.boardModal.find({ teamId: params.teamId }).exec();
+    const boards = await this.boardModel.find({ teamId: params.teamId }).exec();
     // readOnlyBoard[]; 로 바꿈
     return boards.map((board) => board.readOnlyData);
   }
 
   async findOne(id: string) {
-    const board = await this.boardModal.findById(id).exec();
+    const board = await this.boardModel.findById(id).exec();
     return board;
   }
 
   async create(payload: ReadOnlyBoardDto) {
-    const createdBoard = new this.boardModal();
+    const createdBoard = new this.boardModel();
     createdBoard.title = payload.title;
     createdBoard.teamId = payload.teamId;
     return createdBoard.save();
@@ -106,6 +108,26 @@ export class KanbanRepository {
       return await this.cardModel.findByIdAndUpdate(id, payload).exec();
     } catch (error) {
       throw new Error('카드 수정에 실패했습니다.');
+    }
+  }
+
+  // 필터뷰를 조회합니다.
+  async getFilterViews(query: any) {
+    try {
+      return await this.filterViewModel.find(query).exec();
+    } catch (error) {
+      console.log('필터뷰 조회에 실패했습니다.', error);
+      throw new Error('필터뷰 조회에 실패했습니다.');
+    }
+  }
+
+  // 필터뷰를 생성합니다.
+  async createFilterView(payload: any) {
+    try {
+      return await this.filterViewModel.create(payload);
+    } catch (error) {
+      console.log('필터뷰 생성에 실패했습니다.', error);
+      throw new Error('필터뷰 생성에 실패했습니다.');
     }
   }
 }

@@ -125,6 +125,21 @@ export class KanbanController {
     return await this.kanbanService.moveCard(boardId, cardId, body.order);
   }
 
+  /* ----------------------------------- 필터뷰 ---------------------------------- */
+  // 필터뷰 조회 API
+  // GET /kanban/filterViews
+  @Get('/filterViews')
+  async getFilterViews(@Query() query: any): Promise<any> {
+    return await this.kanbanService.getFilterViews(query);
+  }
+
+  // 필터뷰 생성 API
+  // POST /kanban/filterViews
+  @Post('/filterViews')
+  async createFilterView(@Body() body: any): Promise<any> {
+    return await this.kanbanService.createFilterView(body);
+  }
+
   // 정보 컬럼 조회 API
   // GET /kanban/infoColumns
   // @Get('/infoColumns')

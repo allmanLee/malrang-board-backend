@@ -209,8 +209,41 @@ export class Card extends Document {
   readonly readOnlyData: readOnlyCard;
 }
 
+// 필터뷰
+@Schema(options)
+export class FilterView extends Document {
+  @ApiProperty({
+    example: 'label',
+    description: 'label',
+    required: true,
+  })
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  label: string;
+
+  @ApiProperty({
+    example: 'filters',
+    description: '필터',
+    required: true,
+  })
+  @Prop({ required: true, type: Object })
+  filters: any;
+
+  @ApiProperty({
+    example: 'teamId',
+    description: '팀 인덱스',
+    required: true,
+  })
+  @Prop({ required: true })
+  @IsNotEmpty()
+  @IsString()
+  teamId: string;
+}
+
 export const BoardSchema = SchemaFactory.createForClass(Board);
 export const CardSchema = SchemaFactory.createForClass(Card);
+export const FilterViewSchema = SchemaFactory.createForClass(FilterView);
 
 BoardSchema.virtual('readOnlyData').get(function (this: Board): readOnlyBoard {
   const { id, status, title, kanbanId, teamId, permission, order } = this;
