@@ -30,6 +30,8 @@ export interface readOnlyCard {
   projectId: string;
   teamId: string;
   userId: string;
+  endDate: string;
+  startDate: string;
   userName: string;
   boardId: string;
   tags: Tag[];
@@ -121,6 +123,24 @@ export class Card extends Document {
   @Prop({})
   description: string;
 
+  // 시작일
+  @ApiProperty({
+    example: 'startDate',
+    description: '시작일',
+    required: true,
+  })
+  @Prop({})
+  startDate: string;
+
+  // 종료일
+  @ApiProperty({
+    example: 'endDate',
+    description: '종료일',
+    required: true,
+  })
+  @Prop({})
+  endDate: string;
+
   @ApiProperty({
     example: 'created_date',
     description: '생성 날짜',
@@ -160,6 +180,9 @@ export class Card extends Document {
   })
   @Prop({})
   projectCardId: number;
+
+  @Prop({})
+  userAvatar: string;
 
   @ApiProperty({
     example: 'teamId',
@@ -263,6 +286,7 @@ CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
     boardId,
     order,
     projectId,
+    userAvatar,
     tags,
     commit,
   } = this;
@@ -275,7 +299,10 @@ CardSchema.virtual('readOnlyData').get(function (this: Card): readOnlyCard {
     teamId,
     userName,
     boardId,
+    userAvatar,
     projectCardId,
+    endDate: this.endDate,
+    startDate: this.startDate,
     projectId,
     tags,
     order,

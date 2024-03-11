@@ -140,6 +140,23 @@ export class KanbanController {
     return await this.kanbanService.createFilterView(body);
   }
 
+  // 필터뷰 수정 API
+  // PATCH /kanban/filterViews/:id
+  @Patch('/filterViews/:id')
+  async updateFilterView(
+    @Param('id') id: string,
+    @Body() body: any,
+  ): Promise<any> {
+    return await this.kanbanService.updateFilterView(id, body);
+  }
+
+  // 필터뷰 삭제 API
+  // DELETE /kanban/filterViews/:id
+  @Delete('/filterViews/:id')
+  async deleteFilterView(@Param('id') id: string): Promise<any> {
+    return await this.kanbanService.deleteFilterView(id);
+  }
+
   // 정보 컬럼 조회 API
   // GET /kanban/infoColumns
   // @Get('/infoColumns')

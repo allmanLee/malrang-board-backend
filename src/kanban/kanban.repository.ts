@@ -58,8 +58,9 @@ export class KanbanRepository {
       const newCard = new this.cardModel(payload);
 
       // 사용자 이름을 찾아서 카드에 추가합니다.
-      const findUserName = await this.userModel.findById(payload.userId).exec();
-      newCard.userName = findUserName.name;
+      const findUser = await this.userModel.findById(payload.userId).exec();
+      newCard.userName = findUser.name;
+      newCard.userAvatar = findUser.avatar;
 
       // 동일 프로젝트ID의 카드에서 ProjectCardId중 가장 높은 숫자를 찾아서 +1을 해줍니다.
       const cards = await this.cardModel
@@ -84,8 +85,6 @@ export class KanbanRepository {
       const card = await this.cardModel.findById(cardId).exec();
       card.boardId = boardId;
 
-      console.log('-------------order', order);
-
       // 해당 보드의 카드들을 조회합니다.
       const cards = await this.cardModel.find({ boardId }).exec();
 
@@ -105,7 +104,18 @@ export class KanbanRepository {
   // 카드를 수정합니다.
   async updateCard(id: string, payload: any) {
     try {
-      return await this.cardModel.findByIdAndUpdate(id, payload).exec();
+      // 유저 이름을 찾아서 카드에 추가합니다.
+      const findUser = await this.userModel.findById(payload.userId).exec();
+      payload.userName = findUser.name;
+      payload.userAvatar = findUser.avatar;
+
+      console.log('payload 응?', payload);
+
+      const result = await this.cardModel
+        .findByIdAndUpdate(id, payload, { new: true })
+        .exec();
+      console.log('result', result);
+      return result;
     } catch (error) {
       throw new Error('카드 수정에 실패했습니다.');
     }
@@ -128,6 +138,28 @@ export class KanbanRepository {
     } catch (error) {
       console.log('필터뷰 생성에 실패했습니다.', error);
       throw new Error('필터뷰 생성에 실패했습니다.');
+    }
+  }
+
+  // 필터뷰를 수정합니다.
+  async updateFilterView(id: string, payload: any) {
+    try {
+      return await this.filterViewModel.findByIdAndUpdate(id, payload, {
+        new: true,
+      });
+    } catch (error) {
+      console.log('필터뷰 수정에 실패했습니다.', error);
+      throw new Error('필터뷰 수정에 실패했습니다.');
+    }
+  }
+
+  // 필터뷰를 삭제합니다.
+  async deleteFilterView(id: string) {
+    try {
+      return await this.filterViewModel.findByIdAndDelete(id).exec();
+    } catch (error) {
+      console.log('필터뷰 삭제에 실패했습니다.', error);
+      throw new Error('필터뷰 삭제에 실패했습니다.');
     }
   }
 }

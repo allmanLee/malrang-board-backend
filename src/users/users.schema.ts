@@ -18,6 +18,7 @@ export interface readOnlyData {
   groupName: string;
   groupId: string;
   permission: Permission;
+  avatar: string;
 }
 
 @Schema(options)
@@ -77,6 +78,15 @@ export class User extends Document {
   @Prop({})
   groupId: string;
 
+  // 아바타 이미지 url
+  @ApiProperty({
+    example: 'avatar',
+    description: '아바타 이미지 url',
+    required: true,
+  })
+  @Prop({})
+  avatar: string;
+
   readonly readOnlyData: readOnlyData;
 }
 
@@ -111,6 +121,6 @@ export const UserSchema = SchemaFactory.createForClass(User);
 export const GroupSchema = SchemaFactory.createForClass(Group);
 
 UserSchema.virtual('readOnlyData').get(function (this: User): readOnlyData {
-  const { id, email, groupId, name, groupName, permission } = this;
-  return { id, email, groupId, name, groupName, permission };
+  const { id, email, groupId, name, groupName, permission, avatar } = this;
+  return { id, email, groupId, name, groupName, permission, avatar };
 } as any);

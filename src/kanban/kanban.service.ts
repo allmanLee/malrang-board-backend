@@ -89,4 +89,16 @@ export class KanbanService {
   async createFilterView(payload): Promise<any> {
     return await this.kanbanRepository.createFilterView(payload);
   }
+
+  // 필터뷰 수정 API
+  // Patch /kanban/filterViews/:id
+  async updateFilterView(id: string, payload): Promise<any> {
+    return await this.kanbanRepository.updateFilterView(id, payload);
+  }
+
+  // 필터뷰 삭제 API
+  // DELETE /kanban/filterViews/:id
+  async deleteFilterView(id: string): Promise<any> {
+    return await this.kanbanRepository.deleteFilterView(id);
+  }
 }

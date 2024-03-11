@@ -84,12 +84,6 @@ export class ProjectsService {
       const formTemplate: FormTemplate = {
         cols: [
           {
-            key: 'endDate',
-            label: '마감일',
-            type: 'date',
-            required: true,
-          },
-          {
             key: 'pm',
             label: '담당자',
             type: 'select',
